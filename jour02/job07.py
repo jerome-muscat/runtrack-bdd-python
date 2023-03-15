@@ -25,6 +25,7 @@ class Employes:
         ajout_req = f"insert into employes (nom, prenom, salaire, id_service) \
             \nvalues ('{nom}', '{prenom}', {salaire}, {id_service})"
         self.cursor.execute(ajout_req)
+        self.bd.commit()
         self.close()
 
     def lecture(self):
@@ -57,6 +58,7 @@ class Employes:
         else:
             maj_req = f"update employes set {champ} = {nouvelle_valeur} where {condition}"
             self.cursor.execute(maj_req)
+            self.bd.commit()
             self.close()
 
     def supr(self, condition):
@@ -64,6 +66,7 @@ class Employes:
         if type(condition) == str:
             supr_req = f"delete from employes where {condition}"
             self.cursor.execute(supr_req)
+            self.bd.commit()
             self.close()
             
         else:
@@ -87,7 +90,8 @@ for employe in list_employes:
 
 employes.maj('salaire', 4000, 'id = 3')
 
-employes.supr('id = 8')
+employes.supr('id = 10')
+employes.supr('id = 11')
 
 list_employes = employes.lecture()
 for employe in list_employes:
