@@ -1,7 +1,6 @@
 import mysql.connector
 
 class Employes:
-
     def __init__(self, hote, utilisateur, mdp, bdd):
         self.hote = hote
         self.utilisateur = utilisateur
@@ -23,28 +22,27 @@ class Employes:
 
     def ajout(self, nom, prenom, salaire, id_service):
         self.connect()
-        sql = f"insert into employes (nom, prenom, salaire, id_service) \
+        ajout_req = f"insert into employes (nom, prenom, salaire, id_service) \
             \nvalues ('{nom}', '{prenom}', {salaire}, {id_service})"
-        self.cursor.execute(sql)
-        self.bd.commit()
+        self.cursor.execute(ajout_req)
         self.close()
 
     def lecture(self):
         self.connect()
-        sql = "select * from employes"
-        self.cursor.execute(sql)
-        result = self.cursor.fetchall()
+        lecture_req = "select * from employes"
+        self.cursor.execute(lecture_req)
+        resultat = self.cursor.fetchall()
         self.close()
-        return result
+        return resultat
 
     def lectureCondition(self, condition):
         self.connect()
         if type(condition) == str:
-            sql = f"select * from employes where {condition}"
-            self.cursor.execute(sql)
-            result = self.cursor.fetchall()
+            lecture_cond_req = f"select * from employes where {condition}"
+            self.cursor.execute(lecture_cond_req)
+            resultat = self.cursor.fetchall()
             self.close()
-            return result
+            return resultat
         else:
             print("Erreur, condition pas en str")
 
@@ -52,52 +50,45 @@ class Employes:
         self.connect()
         if type(champ) != str:
             print("Le format du champ n'est pas en str")
+        
         elif type(condition) != str:
             print("Le format de condition n'est pas en str")
+        
         else:
-            sql = f"update employes set {champ} = {nouvelle_valeur} where {condition}"
-            self.cursor.execute(sql)
-            # self.bd.commit()
+            maj_req = f"update employes set {champ} = {nouvelle_valeur} where {condition}"
+            self.cursor.execute(maj_req)
             self.close()
 
     def supr(self, condition):
         self.connect()
         if type(condition) == str:
-            sql = f"delete from employes where {condition}"
-            self.cursor.execute(sql)
-            # self.bd.commit()
+            supr_req = f"delete from employes where {condition}"
+            self.cursor.execute(supr_req)
             self.close()
+            
         else:
             print("Le format de condition, n'est pas en str")
 
 employes = Employes('localhost', 'root', 'root', 'magasin')
 
-# sélectionner tous les employés
-result = employes.lecture()
-for row in result:
-    print(row)
+list_employes = employes.lecture()
+for employe in list_employes:
+    print(employe)
 
 employes.ajout('Le Coz', 'Tara', 15000, 1)
 
-# sélectionner tous les employés
-result = employes.lecture()
-for row in result:
-    print(row)
+list_employes = employes.lecture()
+for employe in list_employes:
+    print(employe)
 
-# sélectionner les employés dont le salaire est supérieur à 3000
-result = employes.lectureCondition('salaire > 3000')
-for row in result:
-    print(row)
+list_employes = employes.lectureCondition('salaire > 3000')
+for employe in list_employes:
+    print(employe)
 
-# mettre à jour le salaire d'un employé
 employes.maj('salaire', 4000, 'id = 3')
 
-# supprimer un employé
-employes.supr('id = 6')
-# supprimer un employé
-employes.supr('id = 7')
+employes.supr('id = 8')
 
-# sélectionner tous les employés
-result = employes.lecture()
-for row in result:
-    print(row)
+list_employes = employes.lecture()
+for employe in list_employes:
+    print(employe)
